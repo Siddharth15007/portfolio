@@ -1,26 +1,307 @@
 @import "tailwindcss";
 
+/* ─── CSS Variables ─── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #04060f;
+  --bg2: #080d1a;
+  --bg3: #0d1424;
+  --border: rgba(56, 139, 253, 0.14);
+  --bd2: rgba(56, 139, 253, 0.06);
+  --a1: #388bfd;
+  --a2: #00d4aa;
+  --a3: #9d6fff;
+  --text: #cdd9f0;
+  --muted: #627799;
+  --white: #f0f6ff;
+  --font-outfit: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Base ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-outfit);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ─── Ambient gradient overlay ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 600px at -10% 15%, rgba(56, 139, 253, 0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 700px 500px at 110% 85%, rgba(157, 111, 255, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Scanline texture ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.04) 3px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ─── Keyframes ─── */
+@keyframes fu {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes od {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(35px, -40px);
+  }
+}
+
+@keyframes gs {
+  0%,
+  100% {
+    background-position: 0%;
+  }
+  50% {
+    background-position: 100%;
+  }
+}
+
+@keyframes ldp {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(0, 212, 170, 0);
+  }
+}
+
+@keyframes crp {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.3;
+  }
+}
+
+@keyframes bl {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes scp {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ms {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 26px 26px;
+  }
+}
+
+@keyframes ptup {
+  0% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-10vh);
+    opacity: 0;
+  }
+}
+
+/* ─── Scroll Reveal ─── */
+.rv {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.rv.vis {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.rvl {
+  opacity: 0;
+  transform: translateX(-22px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.rvl.vis {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ─── Skill Tags ─── */
+.tg {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  cursor: default;
+}
+.tg:hover {
+  border-color: var(--a1);
+  color: var(--a1);
+  background: rgba(56, 139, 253, 0.07);
+}
+.tg.hot {
+  border-color: var(--a1);
+  color: var(--a1);
+  background: rgba(56, 139, 253, 0.07);
+}
+.tg.ai {
+  border-color: rgba(157, 111, 255, 0.3);
+  color: #b197fc;
+  background: rgba(157, 111, 255, 0.06);
+}
+.tg.au {
+  border-color: rgba(0, 212, 170, 0.28);
+  color: var(--a2);
+  background: rgba(0, 212, 170, 0.05);
+}
+
+/* ─── Custom Cursor ─── */
+#cur {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--a1);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+}
+#cur-r {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid rgba(56, 139, 253, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+body.h #cur {
+  width: 18px;
+  height: 18px;
+  background: var(--a2);
+}
+body.h #cur-r {
+  width: 48px;
+  height: 48px;
+  border-color: rgba(0, 212, 170, 0.5);
+}
+
+/* ─── Section Label ─── */
+.sec-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--a2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.sec-label::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 2px;
+  background: var(--a2);
+  border-radius: 2px;
+}
+
+/* ─── Section Heading ─── */
+.sec-h2 {
+  font-family: var(--font-outfit);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.15;
+}
+
+/* ─── Exp tags ─── */
+.exp-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 139, 253, 0.18);
+  color: var(--a1);
+  background: rgba(56, 139, 253, 0.07);
+}
+
+/* ─── Utility ─── */
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* Selection */
+::selection {
+  background: rgba(56, 139, 253, 0.25);
+  color: var(--white);
 }
