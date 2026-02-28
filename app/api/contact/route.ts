@@ -1,7 +1,5 @@
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 import { NextResponse } from 'next/server'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: Request) {
     try {
@@ -11,8 +9,17 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
         }
 
-        const { error } = await resend.emails.send({
-            from: 'Portfolio Contact <onboarding@resend.dev>',
+        // Create transporter using Gmail SMTP (free)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.GMAIL_USER,   // your Gmail address
+                pass: process.env.GMAIL_APP_PASS, // Gmail App Password (not your login password)
+            },
+        })
+
+        await transporter.sendMail({
+            from: `"Portfolio Contact" <${process.env.GMAIL_USER}>`,
             to: 'siddharthparekh40@gmail.com',
             replyTo: email,
             subject: `[Portfolio] ${subject}`,
@@ -41,11 +48,6 @@ export async function POST(request: Request) {
                 </div>
             `,
         })
-
-        if (error) {
-            console.error('Resend error:', error)
-            return NextResponse.json({ error: 'Failed to send email. Please try again.' }, { status: 500 })
-        }
 
         return NextResponse.json({ success: true })
     } catch (err) {
